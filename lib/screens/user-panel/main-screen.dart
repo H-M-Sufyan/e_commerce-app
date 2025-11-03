@@ -1,3 +1,4 @@
+import 'package:e_commerce/utils/appConstant.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -6,7 +7,11 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        backgroundColor: AppConstant.AppMainColor,
+        title: Text(AppConstant.appMainName),
+        centerTitle: true,
+      ),
     );
   }
 }
