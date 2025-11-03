@@ -1,4 +1,4 @@
-import 'package:e_commerce/screens/auth-ui/signup.dart';
+import 'package:e_commerce/screens/auth-ui/signin.dart';
 import 'package:e_commerce/utils/appConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -6,14 +6,14 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -23,7 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
             centerTitle: true,
             backgroundColor: AppConstant.AppSecondColor,
             title: Text(
-              "Sign In",
+              "Sign Up",
               style: TextStyle(
                 color: AppConstant.AppTextColor,
                 fontWeight: FontWeight.bold,
@@ -36,19 +36,38 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Container(
               child: Column(
                 children: [
-                  isKeyboardVisible
-                      ? Text("Welcome To Sufyan's Store!")
-                      : Column(
-                          children: [
-                            Container(
-                              color: AppConstant.AppSecondColor,
-                              child: Lottie.asset(
-                                'assets/images/ShoppingCartLoader.json',
-                              ),
-                            ),
-                          ],
-                        ),
                   SizedBox(height: Get.height / 20),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Welcome To Sufyan's Store!",
+                      style: TextStyle(
+                        color: AppConstant.AppSecondColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: Get.height / 20),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    width: Get.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextFormField(
+                        cursorColor: AppConstant.AppSecondColor,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintText: 'UserName',
+                          prefixIcon: Icon(Icons.person),
+                          contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 5.0),
                     width: Get.width,
@@ -60,6 +79,44 @@ class _SignInScreenState extends State<SignInScreen> {
                         decoration: InputDecoration(
                           hintText: 'Email',
                           prefixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    width: Get.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextFormField(
+                        cursorColor: AppConstant.AppSecondColor,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'Phone',
+                          prefixIcon: Icon(Icons.phone),
+                          contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    width: Get.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextFormField(
+                        cursorColor: AppConstant.AppSecondColor,
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          hintText: 'City',
+                          prefixIcon: Icon(Icons.location_on),
                           contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -90,18 +147,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
 
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: AppConstant.AppSecondColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
                   SizedBox(height: Get.height / 20),
                   Material(
                     child: Container(
@@ -113,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       child: TextButton(
                         child: Text(
-                          "SIGN IN",
+                          "SIGN UP",
                           style: TextStyle(color: AppConstant.AppTextColor),
                         ),
                         onPressed: () {},
@@ -127,14 +172,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't Have an Account?",
+                        "Already Have an Account?",
                         style: TextStyle(color: AppConstant.AppSecondColor),
                       ),
                       SizedBox(width: 5),
                       GestureDetector(
-                        onTap: () => Get.offAll(()=>SignUp()),
+                        onTap: () => Get.offAll(()=> SignInScreen()),
                         child: Text(
-                          "Sign Up",
+                          "Sign In",
                           style: TextStyle(
                             color: AppConstant.AppSecondColor,
                             fontWeight: FontWeight.bold,
