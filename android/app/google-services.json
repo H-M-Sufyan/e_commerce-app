@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766652088817",
+    "project_id": "ecomm-af340",
+    "storage_bucket": "ecomm-af340.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766652088817:android:8d822ff65c57fb4fb34450",
+        "android_client_info": {
+          "package_name": "com.example.e_commerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbgcQuww4N0D6Kl5HXgT0gpg_uQ-7AVjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
