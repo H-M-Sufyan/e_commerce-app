@@ -47,7 +47,7 @@ class SignUpcontroller extends GetxController {
       );
 
       // add data into database
-      _firebaseFirestore
+     await  _firebaseFirestore
           .collection('users')
           .doc(userCredential.user!.uid)
           .set(userModel.toMap());
