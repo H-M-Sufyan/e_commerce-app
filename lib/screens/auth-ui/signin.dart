@@ -1,5 +1,8 @@
+import 'package:e_commerce/controllers/signin-controller.dart';
 import 'package:e_commerce/screens/auth-ui/signup.dart';
+import 'package:e_commerce/screens/user-panel/main-screen.dart';
 import 'package:e_commerce/utils/appConstant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
@@ -14,6 +17,10 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final SignIncontroller signIncontroller = Get.put(SignIncontroller());
+  TextEditingController userEmail = TextEditingController();
+  TextEditingController userPassword = TextEditingController();
+  bool obspass = true;
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -55,6 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userEmail,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -75,12 +83,23 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userPassword,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.visiblePassword,
+                        obscureText: obspass,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           prefixIcon: Icon(Icons.password),
-                          suffixIcon: Icon(Icons.visibility_off),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              obspass ? Icons.visibility_off : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                obspass = !obspass;
+                              });
+                            },
+                          ),
                           contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -116,7 +135,56 @@ class _SignInScreenState extends State<SignInScreen> {
                           "SIGN IN",
                           style: TextStyle(color: AppConstant.AppTextColor),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          String emal = userEmail.text.trim();
+                          String password = userPassword.text.trim();
+
+                          if (emal.isEmpty || password.isEmpty) {
+                            Get.snackbar(
+                              "Error",
+                              "Please Enter All Details",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.AppSecondColor,
+                              colorText: AppConstant.AppTextColor,
+                            );
+                          } else {
+                            UserCredential? userCredential =
+                                await signIncontroller.SignInMethod(
+                                  emal,
+                                  password,
+                                );
+
+                            if (userCredential != null) {
+                              if (userCredential.user!.emailVerified) {
+                                Get.snackbar(
+                                  "Success",
+                                  "Login Successfully!",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: AppConstant.AppSecondColor,
+                                  colorText: AppConstant.AppTextColor,
+                                );
+                                Get.offAll(()=> MainScreen());
+                              } else {
+                                Get.snackbar(
+                                  "Error",
+                                  "Please Verify Your Email before Login",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: AppConstant.AppSecondColor,
+                                  colorText: AppConstant.AppTextColor,
+                                );
+                              }
+                            }else{
+                               Get.snackbar(
+                              "Error",
+                              "Please Try Again",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.AppSecondColor,
+                              colorText: AppConstant.AppTextColor,
+                            );
+                            }
+                          }
+                          
+                        },
                       ),
                     ),
                   ),
@@ -132,7 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       SizedBox(width: 5),
                       GestureDetector(
-                        onTap: () => Get.offAll(()=>SignUp()),
+                        onTap: () => Get.offAll(() => SignUp()),
                         child: Text(
                           "Sign Up",
                           style: TextStyle(
