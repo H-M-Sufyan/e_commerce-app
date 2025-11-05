@@ -1,5 +1,6 @@
 import 'package:e_commerce/screens/auth-ui/signin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'firebase_options.dart';
 import 'screens/user-panel/main-screen.dart';
 import 'package:e_commerce/screens/auth-ui/splashScreen.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignInScreen(),
+      home: SplashScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }
