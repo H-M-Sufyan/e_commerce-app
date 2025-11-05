@@ -1,4 +1,5 @@
 import 'package:e_commerce/controllers/google-sign-in-controller.dart';
+import 'package:e_commerce/screens/auth-ui/signin.dart';
 import 'package:e_commerce/utils/appConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,7 +59,7 @@ class WelcomeScreen extends StatelessWidget {
                     style: TextStyle(color: AppConstant.AppTextColor),
                   ),
                   onPressed: () {
-                    _googleSignInController.signInWithGoogle();
+                    _googleSignInController.SignInWithGoogle();
                   },
                 ),
               ),
@@ -78,7 +79,9 @@ class WelcomeScreen extends StatelessWidget {
                     "Sign in With Email",
                     style: TextStyle(color: AppConstant.AppTextColor),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(()=> SignInScreen());
+                  },
                 ),
               ),
             ),

@@ -1,5 +1,7 @@
+import 'package:e_commerce/controllers/signup-controller.dart';
 import 'package:e_commerce/screens/auth-ui/signin.dart';
 import 'package:e_commerce/utils/appConstant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,15 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final SignUpcontroller signUpcontroller = Get.put(SignUpcontroller());
+
+  TextEditingController userName = TextEditingController();
+  TextEditingController userEmail = TextEditingController();
+  TextEditingController userPhone = TextEditingController();
+  TextEditingController userCity = TextEditingController();
+  TextEditingController userPassword = TextEditingController();
+  bool obspass = true;
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -55,6 +66,7 @@ class _SignUpState extends State<SignUp> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userName,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -74,6 +86,7 @@ class _SignUpState extends State<SignUp> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userEmail,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -93,6 +106,7 @@ class _SignUpState extends State<SignUp> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userPhone,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
@@ -112,6 +126,7 @@ class _SignUpState extends State<SignUp> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userCity,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.streetAddress,
                         decoration: InputDecoration(
@@ -132,12 +147,24 @@ class _SignUpState extends State<SignUp> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: userPassword,
                         cursorColor: AppConstant.AppSecondColor,
                         keyboardType: TextInputType.visiblePassword,
+                        obscureText: obspass,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           prefixIcon: Icon(Icons.password),
-                          suffixIcon: Icon(Icons.visibility_off),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              obspass ? Icons.visibility_off : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                obspass = !obspass;
+                              });
+                            },
+                          ),
+
                           contentPadding: EdgeInsets.only(top: 2.0, left: 8.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -161,7 +188,50 @@ class _SignUpState extends State<SignUp> {
                           "SIGN UP",
                           style: TextStyle(color: AppConstant.AppTextColor),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          String name = userName.text.trim();
+                          String email = userEmail.text.trim();
+                          String phone = userPhone.text.trim();
+                          String city = userCity.text.trim();
+                          String password = userPassword.text.trim();
+                          String userDeviceToken = '';
+
+                          if (name.isEmpty ||
+                              email.isEmpty ||
+                              phone.isEmpty ||
+                              city.isEmpty ||
+                              password.isEmpty) {
+                            Get.snackbar(
+                              "Error",
+                              "Please Enter All Details",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.AppSecondColor,
+                              colorText: AppConstant.AppTextColor,
+                            );
+                          } else {
+                            UserCredential? userCredential =
+                                await signUpcontroller.SignUpMethod(
+                                  name,
+                                  email,
+                                  phone,
+                                  city,
+                                  password,
+                                  userDeviceToken,
+                                );
+
+                            if (userCredential != null) {
+                              Get.snackbar(
+                                "Verification Email Sent",
+                                "Please check Your Email",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.AppSecondColor,
+                                colorText: AppConstant.AppTextColor,
+                              );
+                              FirebaseAuth.instance.signOut();
+                              Get.offAll(()=> SignInScreen());
+                            }
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -177,7 +247,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       SizedBox(width: 5),
                       GestureDetector(
-                        onTap: () => Get.offAll(()=> SignInScreen()),
+                        onTap: () => Get.offAll(() => SignInScreen()),
                         child: Text(
                           "Sign In",
                           style: TextStyle(
