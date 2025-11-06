@@ -1,12 +1,12 @@
 import 'package:e_commerce/controllers/signin-controller.dart';
 import 'package:e_commerce/screens/auth-ui/signup.dart';
+import 'package:e_commerce/screens/forget-pass-screen.dart';
 import 'package:e_commerce/screens/user-panel/main-screen.dart';
 import 'package:e_commerce/utils/appConstant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -112,11 +112,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0),
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: AppConstant.AppSecondColor,
-                        fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(()=> ForgetPassScreen());
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: AppConstant.AppSecondColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

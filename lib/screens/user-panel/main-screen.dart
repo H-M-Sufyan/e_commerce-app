@@ -1,5 +1,6 @@
 import 'package:e_commerce/screens/auth-ui/welcomeScreen.dart';
 import 'package:e_commerce/utils/appConstant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,16 +18,15 @@ class MainScreen extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () async {
-              GoogleSignIn googleSignIn = GoogleSignIn.instance;
-
-              await googleSignIn.signOut();
-              Get.offAll(()=> WelcomeScreen());
+              FirebaseAuth _auth = FirebaseAuth.instance;
+              await _auth.signOut();
+              Get.offAll(() => WelcomeScreen());
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.logout),
             ),
-          )
+          ),
         ],
       ),
     );
