@@ -1,4 +1,6 @@
+import 'package:e_commerce/controllers/get-user-data-controller.dart';
 import 'package:e_commerce/controllers/signin-controller.dart';
+import 'package:e_commerce/screens/admin-panel/admin-main-screen.dart';
 import 'package:e_commerce/screens/auth-ui/signup.dart';
 import 'package:e_commerce/screens/forget-pass-screen.dart';
 import 'package:e_commerce/screens/user-panel/main-screen.dart';
@@ -18,6 +20,9 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final SignIncontroller signIncontroller = Get.put(SignIncontroller());
+  final GetUserDataCollection getUserDataCollection = Get.put(
+    GetUserDataCollection(),
+  );
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPassword = TextEditingController();
   bool obspass = true;
@@ -114,7 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(()=> ForgetPassScreen());
+                        Get.to(() => ForgetPassScreen());
                       },
                       child: Text(
                         "Forgot Password?",
@@ -141,10 +146,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           style: TextStyle(color: AppConstant.AppTextColor),
                         ),
                         onPressed: () async {
-                          String emal = userEmail.text.trim();
+                          String email = userEmail.text.trim();
                           String password = userPassword.text.trim();
 
-                          if (emal.isEmpty || password.isEmpty) {
+                          if (email.isEmpty || password.isEmpty) {
                             Get.snackbar(
                               "Error",
                               "Please Enter All Details",
@@ -152,43 +157,53 @@ class _SignInScreenState extends State<SignInScreen> {
                               backgroundColor: AppConstant.AppSecondColor,
                               colorText: AppConstant.AppTextColor,
                             );
-                          } else {
-                            UserCredential? userCredential =
-                                await signIncontroller.SignInMethod(
-                                  emal,
-                                  password,
-                                );
+                            return;
+                          }
 
-                            if (userCredential != null) {
-                              if (userCredential.user!.emailVerified) {
-                                Get.snackbar(
-                                  "Success",
-                                  "Login Successfully!",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: AppConstant.AppSecondColor,
-                                  colorText: AppConstant.AppTextColor,
-                                );
-                                Get.offAll(()=> MainScreen());
-                              } else {
-                                Get.snackbar(
-                                  "Error",
-                                  "Please Verify Your Email before Login",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: AppConstant.AppSecondColor,
-                                  colorText: AppConstant.AppTextColor,
-                                );
-                              }
-                            }else{
-                               Get.snackbar(
+                          UserCredential? userCredential =
+                              await signIncontroller.SignInMethod(
+                                email,
+                                password,
+                              );
+
+                          if (userCredential == null) {
+                            Get.snackbar(
                               "Error",
-                              "Please Try Again",
+                              "Login Failed",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                            return;
+                          }
+
+                          if (!userCredential.user!.emailVerified) {
+                            Get.snackbar(
+                              "Email Not Verified",
+                              "Please verify your email before login.",
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: AppConstant.AppSecondColor,
                               colorText: AppConstant.AppTextColor,
                             );
-                            }
+                            return;
                           }
-                          
+
+                          var userData = await getUserDataCollection
+                              .getUserData(userCredential.user!.uid);
+
+                          if (userData[0]['isAdmin'] == true) {
+                            Get.offAll(() => AdminMainScreen());
+                            print("Goes To admin panel");
+                          } else {
+                            Get.offAll(() => MainScreen());
+                            print("Goes To user panel");
+                          }
+
+                          Get.snackbar(
+                            "Success",
+                            "Login Successfully!",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: AppConstant.AppSecondColor,
+                            colorText: AppConstant.AppTextColor,
+                          );
                         },
                       ),
                     ),

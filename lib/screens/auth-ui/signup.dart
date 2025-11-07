@@ -1,3 +1,4 @@
+import 'package:e_commerce/controllers/fetch-devicetoken-controller.dart';
 import 'package:e_commerce/controllers/signup-controller.dart';
 import 'package:e_commerce/screens/auth-ui/signin.dart';
 import 'package:e_commerce/utils/appConstant.dart';
@@ -5,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class SignUp extends StatefulWidget {
@@ -17,6 +17,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final SignUpcontroller signUpcontroller = Get.put(SignUpcontroller());
+  final FetchDeviceToken fetchDeviceToken = Get.put(FetchDeviceToken());
 
   TextEditingController userName = TextEditingController();
   TextEditingController userEmail = TextEditingController();
@@ -194,7 +195,8 @@ class _SignUpState extends State<SignUp> {
                           String phone = userPhone.text.trim();
                           String city = userCity.text.trim();
                           String password = userPassword.text.trim();
-                          String userDeviceToken = '';
+                          String userDeviceToken = fetchDeviceToken.deviceToken
+                              .toString();
 
                           if (name.isEmpty ||
                               email.isEmpty ||
@@ -228,7 +230,7 @@ class _SignUpState extends State<SignUp> {
                                 colorText: AppConstant.AppTextColor,
                               );
                               FirebaseAuth.instance.signOut();
-                              Get.offAll(()=> SignInScreen());
+                              Get.offAll(() => SignInScreen());
                             }
                           }
                         },
