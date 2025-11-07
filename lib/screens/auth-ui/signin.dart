@@ -191,10 +191,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
                           if (userData[0]['isAdmin'] == true) {
                             Get.offAll(() => AdminMainScreen());
-                            print("Goes To admin panel");
+
                           } else {
                             Get.offAll(() => MainScreen());
-                            print("Goes To user panel");
                           }
 
                           Get.snackbar(
